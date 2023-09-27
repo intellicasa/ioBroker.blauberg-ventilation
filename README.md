@@ -13,7 +13,7 @@
 
 ## blauberg-ventilation adapter for ioBroker
 
-Adapter for integrating your Blauberg vents. Test
+Adapter for integrating your Blauberg vents.
 
 ## Developer manual
 
