@@ -1,0 +1,10 @@
+{
+	"Options": "Options",
+	"configTableLabel": "Vents",
+	"configLabelName": "Name",
+	"configHelpName": "Name of the vent (e.g. Living room)",
+	"configLabelID": "Vent ID",
+	"configHelpID": "This number is printed on the label (16 characters)",
+	"configLabelPassword": "Password",
+	"configHelpPassword": "Default is 1111"
+}

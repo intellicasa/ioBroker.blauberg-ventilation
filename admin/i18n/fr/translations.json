@@ -1,0 +1,10 @@
+{
+    "Options": "Possibilités",
+    "configTableLabel": "Évents",
+    "configLabelName": "Nom",
+    "configHelpName": "Nom de la bouche d'aération (par exemple, salon)",
+    "configLabelID": "ID de ventilation",
+    "configHelpID": "Ce numéro est imprimé sur l'étiquette (16 caractères)",
+    "configLabelPassword": "Mot de passe",
+    "configHelpPassword": "La valeur par défaut est 1111"
+}

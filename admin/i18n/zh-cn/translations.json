@@ -1,0 +1,10 @@
+{
+    "Options": "选项",
+    "configTableLabel": "通风口",
+    "configLabelName": "姓名",
+    "configHelpName": "通风口名称（例如客厅）",
+    "configLabelID": "通风口内径",
+    "configHelpID": "该号码印在标签上（16 个字符）",
+    "configLabelPassword": "密码",
+    "configHelpPassword": "默认为 1111"
+}

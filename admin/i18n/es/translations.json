@@ -1,0 +1,10 @@
+{
+    "Options": "Opciones",
+    "configTableLabel": "Ventilaciones",
+    "configLabelName": "Nombre",
+    "configHelpName": "Nombre del respiradero (por ejemplo, sala de estar)",
+    "configLabelID": "ID de ventilación",
+    "configHelpID": "Este número está impreso en la etiqueta (16 caracteres)",
+    "configLabelPassword": "Contraseña",
+    "configHelpPassword": "El valor predeterminado es 1111"
+}

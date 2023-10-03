@@ -1,4 +1,6 @@
-"use strict";
+//import { BlaubergVentoResource, FunctionType, Parameter, DataEntry } from "blaugbergventojs";
+
+("use strict");
 
 /*
  * Created with @iobroker/create-adapter v2.5.0
@@ -7,9 +9,18 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
+const blaubergVentoJS = require("blaubergventojs");
+
+//const resource = new BlaubergVentoResource();
 
 // Load your modules here, e.g.:
 // const fs = require("fs");
+
+async function asyncForEach(array, callback) {
+	for (let index = 0; index < array.length; index++) {
+		await callback(array[index], index, array);
+	}
+}
 
 class BlaubergVentilation extends utils.Adapter {
 	/**
@@ -31,15 +42,78 @@ class BlaubergVentilation extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
-		// Initialize your adapter here
+		this.log.debug(`instance config: ${JSON.stringify(this.config)}`);
+
+		if (typeof this.config.vents == "undefined" || !this.config.vents.length) {
+			this.log.error("Please set at least one vent in the adapter configuration!");
+			return;
+		} else {
+			try {
+				const ventArray = this.config.vents;
+
+				//Validate each Vent entry
+				await asyncForEach(ventArray, async (vent) => {
+					this.log.debug(
+						"Vent Name: " + vent.name + "   Vent ID: " + vent.id + " Vent Password: " + vent.password,
+					);
+
+					this.setStateChangedAsync("vents.${vent.name}.name", vent.name);
+					this.setStateChangedAsync("vents.${vent.id}.id", vent.id);
+					this.setStateChangedAsync("vents.${vent.password}.password", vent.password);
+
+					if (!vent.name) {
+						throw new Error("Invalid Vent configuration. Found Vent without name");
+					}
+
+					if (!vent.id) {
+						throw new Error("Invalid Vent configuration. Found Vent without ID");
+					} else if (vent.id.length != 16) {
+						throw new Error("Invalid Vent configuration. Vent ID must be 16 Characters long");
+					} // TODO: Check if ID is Hexadecimal -> Check with Regex???
+
+					if (!vent.password) {
+						throw new Error("Invalid Vent configuration. Found Vent without password");
+					}
+				});
+			} catch (err) {
+				this.log.error(err);
+				return;
+			}
+		}
+
+		// Find all devices on the local network
+		const resource = new blaubergVentoJS.BlaubergVentoResource();
+		const client = new blaubergVentoJS.BlaubergVentoClient();
+		const devices = await resource.findAll();
+
+		let ventBuero = resource.findById("001F003442535303");
+		(await ventBuero).speed = 3;
+		console.log("IP: " + (await ventBuero).ipAddress);
+
+		const packet = new blaubergVentoJS.Packet((await ventBuero).id, "1111", blaubergVentoJS.FunctionType.WRITE, [
+			blaubergVentoJS.DataEntry.of(blaubergVentoJS.Parameter.SPEED, 1),
+		]);
+
+		// Send package and wait for response.
+		const response = await client.send(packet, (await ventBuero).ipAddress);
+
+		//(await ventBuero).speed = 3;
+		//await resource.save(await ventBuero);
+
+		//devices.content.forEach((vent) => console.log("blabla"));
+		devices.content.forEach((vent) => console.log("IP: " + vent.ipAddress + " ID: " + vent.id));
+		/*for (let i = 0; i < devices.size; i++) {
+			console.log(devices.content[i].ipAddress);
+			console.log(devices.content[i].id);
+			console.log(devices.content[i].humidity);
+		}*/
+
+		//this.log.error("" + devices.size);
+		//let device = devices[0];
+		//this.log.error(device.ipAddress);
 
 		// Reset the connection indicator during startup
 		this.setState("info.connection", false, true);
-
-		// The adapters config (in the instance object everything under the attribute "native") is accessible via
-		// this.config:
-		this.log.info("config option1: " + this.config.option1);
-		this.log.info("config option2: " + this.config.option2);
 
 		/*
 		For every state in the system there has to be also an object of type state

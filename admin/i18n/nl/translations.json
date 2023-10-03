@@ -1,0 +1,10 @@
+{
+    "Options": "Opties",
+    "configTableLabel": "Ventilatieopeningen",
+    "configLabelName": "Naam",
+    "configHelpName": "Naam van de ventilatieopening (bijvoorbeeld woonkamer)",
+    "configLabelID": "Ventilatie-ID",
+    "configHelpID": "Dit nummer staat op het etiket gedrukt (16 tekens)",
+    "configLabelPassword": "Wachtwoord",
+    "configHelpPassword": "De standaardwaarde is 1111"
+}

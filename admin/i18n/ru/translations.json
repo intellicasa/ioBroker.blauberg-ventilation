@@ -1,0 +1,10 @@
+{
+    "Options": "Параметры",
+    "configTableLabel": "Вентиляционные отверстия",
+    "configLabelName": "Имя",
+    "configHelpName": "Название вентиляционного отверстия (например, Гостиная)",
+    "configLabelID": "Идентификатор вентиляции",
+    "configHelpID": "Этот номер напечатан на этикетке (16 символов).",
+    "configLabelPassword": "Пароль",
+    "configHelpPassword": "По умолчанию 1111."
+}

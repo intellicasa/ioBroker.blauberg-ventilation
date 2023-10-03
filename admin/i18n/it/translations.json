@@ -1,0 +1,10 @@
+{
+    "Options": "Opzioni",
+    "configTableLabel": "Prese d'aria",
+    "configLabelName": "Nome",
+    "configHelpName": "Nome della ventola (es. Soggiorno)",
+    "configLabelID": "ID dello sfiato",
+    "configHelpID": "Questo numero è stampato sull'etichetta (16 caratteri)",
+    "configLabelPassword": "Parola d'ordine",
+    "configHelpPassword": "L'impostazione predefinita è 1111"
+}

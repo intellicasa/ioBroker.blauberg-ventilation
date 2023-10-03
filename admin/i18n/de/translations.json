@@ -1,0 +1,10 @@
+{
+	"Options": "Optionen",
+	"configTableLabel": "Lüfter",
+	"configLabelName": "Name",
+	"configHelpName": "Name der Lüftungsöffnung (z. B. Wohnzimmer)",
+	"configLabelID": "Lüfter ID",
+	"configHelpID": "Die ID ist auf dem Etikett aufgedruckt (16 Zeichen)",
+	"configLabelPassword": "Passwort",
+	"configHelpPassword": "Der Standardwert ist 1111"
+}

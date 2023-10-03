@@ -1,0 +1,10 @@
+{
+    "Options": "Opções",
+    "configTableLabel": "Aberturas",
+    "configLabelName": "Nome",
+    "configHelpName": "Nome da ventilação (por exemplo, sala de estar)",
+    "configLabelID": "ID de ventilação",
+    "configHelpID": "Este número está impresso na etiqueta (16 caracteres)",
+    "configLabelPassword": "Senha",
+    "configHelpPassword": "O padrão é 1111"
+}

@@ -1,0 +1,10 @@
+{
+    "Options": "Opcje",
+    "configTableLabel": "Otwory wentylacyjne",
+    "configLabelName": "Nazwa",
+    "configHelpName": "Nazwa otworu wentylacyjnego (np. Pokój dzienny)",
+    "configLabelID": "Identyfikator wentylacji",
+    "configHelpID": "Numer ten jest wydrukowany na etykiecie (16 znaków)",
+    "configLabelPassword": "Hasło",
+    "configHelpPassword": "Wartość domyślna to 1111"
+}

@@ -1,0 +1,10 @@
+{
+    "Options": "Опції",
+    "configTableLabel": "вентиляційні отвори",
+    "configLabelName": "Ім'я",
+    "configHelpName": "Назва вентиляційного отвору (наприклад, Вітальня)",
+    "configLabelID": "Ідентифікатор вентиляційного отвору",
+    "configHelpID": "Цей номер надруковано на етикетці (16 символів)",
+    "configLabelPassword": "Пароль",
+    "configHelpPassword": "За замовчуванням 1111"
+}

@@ -1,0 +1,49 @@
+{
+	"i18n": true,
+	"type": "tabs",
+	"items": {
+		"_options": {
+			"type": "panel",
+			"label": "Options",
+			"items": {
+				"vents": {
+					"type": "table",
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"label": "configTableLabel",
+					"items": [
+						{
+							"type": "text",
+							"attr": "name",
+							"width": "40%",
+							"title": "configLabelName",
+							"filter": true,
+							"sort": true,
+							"help": "configHelpName"
+						},
+						{
+							"type": "text",
+							"attr": "id",
+							"width": "40%",
+							"title": "configLabelID",
+							"filter": true,
+							"sort": true,
+							"help": "configHelpID",
+							"default": "01234567890ABCDEF"
+						},
+						{
+							"type": "password",
+							"attr": "password",
+							"width": "20%",
+							"title": "configLabelPassword",
+							"filter": false,
+							"sort": false,
+							"help": "configHelpPassword"
+						}
+					]
+				}
+			}
+		}
+	}
+}

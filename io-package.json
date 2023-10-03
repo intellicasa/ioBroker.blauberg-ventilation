@@ -5,44 +5,17 @@
 		"news": {
 			"0.0.1": {
 				"en": "initial release",
-				"de": "Erstveröffentlichung",
-				"ru": "Начальная версия",
-				"pt": "lançamento inicial",
-				"nl": "Eerste uitgave",
-				"fr": "Première version",
-				"it": "Versione iniziale",
-				"es": "Versión inicial",
-				"pl": "Pierwsze wydanie",
-				"uk": "Початкова версія",
-				"zh-cn": "首次出版"
+				"de": "Erstveröffentlichung"
 			}
 		},
 		"title": "Blauberg Ventilation",
 		"titleLang": {
 			"en": "Blauberg Ventilation",
-			"de": "Blauberg-Belüftung",
-			"ru": "Блауберг Вентиляция",
-			"pt": "Ventilação Blauberg",
-			"nl": "Blauberg Ventilatie",
-			"fr": "Blauberg Ventilation",
-			"it": "Ventilazione Blauberg",
-			"es": "Ventilación Blauberg",
-			"pl": "Wentylacja Blauberga",
-			"uk": "Вентиляція Blauberg",
-			"zh-cn": "布劳伯格通风"
+			"de": "Blauberg-Lüfter"
 		},
 		"desc": {
 			"en": "Adapter for integrating your Blauberg vents",
-			"de": "Adapter zur Integration Ihrer Blauberg-Lüfter",
-			"ru": "Адаптер для интеграции дефлекторов Blauberg",
-			"pt": "Adaptador para integrar suas aberturas Blauberg",
-			"nl": "Adapter voor het integreren van uw Blauberg ventilatieroosters",
-			"fr": "Adaptateur pour intégrer vos bouches d'aération Blauberg",
-			"it": "Adattatore per l'integrazione delle vostre bocchette Blauberg",
-			"es": "Adaptador para integrar tus rejillas de ventilación Blauberg",
-			"pl": "Adapter do integracji nawiewników Blauberg",
-			"uk": "Адаптер для інтеграції вентиляційних отворів Blauberg",
-			"zh-cn": "用于集成 Blauberg 通风口的适配器"
+			"de": "Adapter zur Integration Ihrer Blauberg-Lüfter"
 		},
 		"authors": ["Dipl.-Ing. Daniel Richter <info@danielrichter.eu>"],
 		"keywords": ["ventilation", "vent", "blauberg", "climate"],
@@ -60,7 +33,7 @@
 		"connectionType": "local",
 		"dataSource": "poll",
 		"adminUI": {
-			"config": "materialize"
+			"config": "json"
 		},
 		"eraseOnUpload": true,
 		"dependencies": [
@@ -75,8 +48,7 @@
 		]
 	},
 	"native": {
-		"option1": true,
-		"option2": "42"
+		"vents": []
 	},
 	"objects": [],
 	"instanceObjects": [
