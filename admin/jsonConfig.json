@@ -30,7 +30,7 @@
 							"filter": true,
 							"sort": true,
 							"help": "configHelpID",
-							"default": "01234567890ABCDEF"
+							"default": "0123456789ABCDEF"
 						},
 						{
 							"type": "password",

@@ -22,7 +22,7 @@
 		"license": "Apache-2.0",
 		"platform": "Javascript/Node.js",
 		"main": "main.js",
-		"icon": "blauberg-ventilation.png",
+		"icon": "blauberg.png",
 		"enabled": true,
 		"extIcon": "https://raw.githubusercontent.com/intellicasa/ioBroker.blauberg-ventilation/main/admin/blauberg-ventilation.png",
 		"readme": "https://github.com/intellicasa/ioBroker.blauberg-ventilation/blob/main/README.md",

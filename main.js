@@ -2,25 +2,65 @@
 
 ("use strict");
 
-/*
- * Created with @iobroker/create-adapter v2.5.0
- */
+const BlaubergVentoClient = require("blaubergventojs").BlaubergVentoClient;
+const BlaubergVentoResource = require("blaubergventojs").BlaubergVentoResource;
 
-// The adapter-core module gives you access to the core ioBroker functions
-// you need to create an adapter
+// core ioBroker functions
 const utils = require("@iobroker/adapter-core");
+// functions to read and write vents
 const blaubergVentoJS = require("blaubergventojs");
-
-//const resource = new BlaubergVentoResource();
-
-// Load your modules here, e.g.:
-// const fs = require("fs");
 
 async function asyncForEach(array, callback) {
 	for (let index = 0; index < array.length; index++) {
 		await callback(array[index], index, array);
 	}
 }
+
+const ID = "ID";
+const ON_OFF = "On_Off";
+const SPEED = "Speed";
+//const BOOST_MODE = "Boost_Mode";
+//const TIMER_MODE = "Timer_Mode";
+//const TIMER_COUNT_DOWN = "TIMER_COUNT_DOWN";
+/*HUMIDITY_SENSOR_ACTIVATION,
+    RELAY_SENSOR_ACTIVIATION,
+    VOLTAGE_SENSOR_ACTIVATION,
+    HUMIDITY_THRESHOLD,
+    CURRENT_RTC_BATTERY_VOLTAGE,
+    CURRENT_HUMIDITY,
+    CURRENT_VOLTAGE_SENSOR_STATE,
+    CURRENT_RELAY_SENSOR_STATE,
+    MANUAL_SPEED,
+    FAN1RPM,
+    FAN2RPM,
+    FILTER_TIMER,
+    RESET_FILTER_TIMER,
+    BOOST_MODE_DEACTIVATION_DELAY,
+    RTC_TIME,
+    RTC_CALENDAR,
+    WEEKLY_SCHEDULE,
+    SCHEDULE_SETUP,
+    SEARCH,
+    PASSWORD,
+    MACHINE_HOURS,
+    RESET_ALARMS,
+    READ_ALARM,
+    CLOUD_SERVER_OPERATION_PERMISSION,
+    READ_FIRMWARE_VERSION,
+    RESTORE_FACTORY_SETTINGS,
+    FILTER_ALARM,
+    WIFI_MODE,
+    WIFI_NAME,
+    WIFI_PASSWORD,
+    WIFI_ENCRYPTION,
+    WIFI_CHANNEL,
+    WIFI_DHCP,*/
+//const IP_ADDRESS = "IP_Address";
+//const SUBNET_MASK = "Subnet_Mask";
+//const GATEWAY = "Gateway";
+const CURRENT_IP_ADDRESS = "Current_IP_Address";
+const VENTILATION_MODE = "Ventilation_Mode";
+//const UNIT_TYPE = "Unit_Type";
 
 class BlaubergVentilation extends utils.Adapter {
 	/**
@@ -36,12 +76,25 @@ class BlaubergVentilation extends utils.Adapter {
 		// this.on("objectChange", this.onObjectChange.bind(this));
 		// this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
+
+		// Key in this Map ist the id for each state, Value is the configuration for the corresponding vent
+		this.configMap = new Map();
+		// Key in this Map ist the id for each state, Value is the Parameter (number) to be send by API
+		this.parameterMap = new Map();
+
+		this.client = new BlaubergVentoClient();
+		this.resource = new BlaubergVentoResource();
+
+		this.updateInterval = null;
 	}
 
 	/**
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
+		// Alle eigenen States abonnieren
+		await this.subscribeStatesAsync("vents.*");
+
 		this.log.debug(`instance config: ${JSON.stringify(this.config)}`);
 
 		if (typeof this.config.vents == "undefined" || !this.config.vents.length) {
@@ -49,48 +102,15 @@ class BlaubergVentilation extends utils.Adapter {
 			return;
 		} else {
 			try {
-				const ventArray = this.config.vents;
-
 				//Validate each Vent entry
-				await asyncForEach(ventArray, async (vent) => {
-					this.log.debug(
-						"Vent Name: " + vent.name + "   Vent ID: " + vent.id + " Vent Password: " + vent.password,
-					);
+				await asyncForEach(this.config.vents, async (ventConfigEntry) => {
+					this.validateVentConfig(ventConfigEntry);
 
-					if (!vent.name) {
-						throw new Error("Invalid Vent configuration. Found Vent without name");
-					}
-
-					if (!vent.id) {
-						throw new Error("Invalid Vent configuration. Found Vent without ID");
-					} else if (vent.id.length != 16) {
-						throw new Error("Invalid Vent configuration. Vent ID must be 16 Characters long");
-					} // TODO: Check if ID is Hexadecimal -> Check with Regex???
-
-					if (!vent.password) {
-						throw new Error("Invalid Vent configuration. Found Vent without password");
-					}
-
-					const cleanVentName = this.cleanNamespace(vent.name);
-
-					await this.setObjectNotExistsAsync("vents." + cleanVentName + ".name", {
-						type: "state",
-						common: {
-							name: {
-								en: "name",
-								de: "Name",
-							},
-							type: "string",
-							role: "value",
-							//unit: "bla",
-							read: true,
-							write: false,
-							def: "",
-						},
-						native: {},
-					});
-
-					await this.setStateChangedAsync("vents." + cleanVentName + ".name", vent.name), true;
+					this.createDeviceAndStringState(ventConfigEntry, 0, "info", ID, "", false);
+					this.createDeviceAndStringState(ventConfigEntry, 0, "info", CURRENT_IP_ADDRESS, "", false);
+					this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.VENTILATION_MODE, "control", VENTILATION_MODE, "", true, 0, 2);
+					this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.SPEED, "control", SPEED, "", true, 1, 3);
+					this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.ON_OFF, "control", ON_OFF, "", true, 0, 1);
 				});
 			} catch (err) {
 				this.log.error(err);
@@ -98,84 +118,166 @@ class BlaubergVentilation extends utils.Adapter {
 			}
 		}
 
-		// Find all devices on the local network
-		const resource = new blaubergVentoJS.BlaubergVentoResource();
-		const client = new blaubergVentoJS.BlaubergVentoClient();
-		const devices = await resource.findAll();
-
-		let ventBuero = resource.findById("001F003442535303");
-		(await ventBuero).speed = 3;
-		console.log("IP: " + (await ventBuero).ipAddress);
-
-		const packet = new blaubergVentoJS.Packet((await ventBuero).id, "1111", blaubergVentoJS.FunctionType.WRITE, [
-			blaubergVentoJS.DataEntry.of(blaubergVentoJS.Parameter.SPEED, 1),
-		]);
-
-		// Send package and wait for response.
-		const response = await client.send(packet, (await ventBuero).ipAddress);
-
-		//(await ventBuero).speed = 3;
-		//await resource.save(await ventBuero);
-
-		//devices.content.forEach((vent) => console.log("blabla"));
-		devices.content.forEach((vent) => console.log("IP: " + vent.ipAddress + " ID: " + vent.id));
-		/*for (let i = 0; i < devices.size; i++) {
-			console.log(devices.content[i].ipAddress);
-			console.log(devices.content[i].id);
-			console.log(devices.content[i].humidity);
-		}*/
-
-		//this.log.error("" + devices.size);
-		//let device = devices[0];
-		//this.log.error(device.ipAddress);
+		this.updateintervall = setInterval(async () => {
+			this.updateVentdataPeriodically();
+		}, parseInt("10000"));
 
 		// Reset the connection indicator during startup
 		this.setState("info.connection", false, true);
+	}
 
-		/*
-		For every state in the system there has to be also an object of type state
-		Here a simple template for a boolean variable named "testVariable"
-		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-		*/
-		await this.setObjectNotExistsAsync("testVariable", {
+	validateVentConfig(vent) {
+		this.log.debug("Vent Name: " + vent.name + "   Vent ID: " + vent.id + " Vent Password: " + vent.password);
+
+		if (!vent.name) {
+			throw new Error("Invalid Vent configuration. Found Vent without name");
+		}
+
+		const hexRegexp = /^[0-9A-F]+$/;
+		if (!vent.id) {
+			throw new Error("Invalid Vent configuration. Found Vent without ID");
+		} else if (vent.id.length != 16) {
+			throw new Error("Invalid Vent configuration. Vent ID must be 16 Characters long: " + vent.id);
+		} else if (!hexRegexp.test(vent.id)) {
+			throw new Error("Invalid Vent configuration. Vent ID must be hexadecimal. Only decimals 0-9 and uppercase letters A-F are allowed: " + vent.id);
+		}
+
+		if (!vent.password) {
+			throw new Error("Invalid Vent configuration. Found Vent without password");
+		}
+	}
+
+	/**
+	 * @param {any} ventConfigEntry
+	 * @param {number} parameter
+	 * @param {string} channelName
+	 * @param {string} objectName
+	 * @param {string} unit
+	 * @param {boolean} writeAllowed
+	 */
+	createDeviceAndStringState(ventConfigEntry, parameter, channelName, objectName, unit, writeAllowed) {
+		const cleanVentName = this.cleanNamespace(ventConfigEntry.name);
+
+		this.createDeviceObject(cleanVentName);
+		this.createChannelObject(cleanVentName, channelName);
+
+		const path = this.createPath(cleanVentName, channelName, objectName);
+
+		this.setObjectNotExistsAsync(path, {
 			type: "state",
 			common: {
-				name: "testVariable",
-				type: "boolean",
-				role: "indicator",
+				name: objectName,
+				type: "string",
+				role: "value",
+				unit: unit,
 				read: true,
-				write: true,
+				write: writeAllowed,
 			},
 			native: {},
 		});
 
-		// In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-		this.subscribeStates("testVariable");
-		// You can also add a subscription for multiple states. The following line watches all states starting with "lights."
-		// this.subscribeStates("lights.*");
-		// Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
-		// this.subscribeStates("*");
+		this.configMap.set(path, ventConfigEntry);
+		this.parameterMap.set(path, parameter);
+	}
 
-		/*
-			setState examples
-			you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-		*/
-		// the variable testVariable is set to true as command (ack=false)
-		await this.setStateAsync("testVariable", true);
+	/**
+	 * @param {any} ventConfigEntry
+	 * @param {number} parameter
+	 * @param {string} channelName
+	 * @param {string} objectName
+	 * @param {string} unit
+	 * @param {boolean} writeAllowed
+	 * @param {number} min
+	 * @param {number} max
+	 */
+	createDeviceAndNumberState(ventConfigEntry, parameter, channelName, objectName, unit, writeAllowed, min, max) {
+		const cleanVentName = this.cleanNamespace(ventConfigEntry.name);
 
-		// same thing, but the value is flagged "ack"
-		// ack should be always set to true if the value is received from or acknowledged from the target system
-		await this.setStateAsync("testVariable", { val: true, ack: true });
+		this.createDeviceObject(cleanVentName);
+		this.createChannelObject(cleanVentName, channelName);
 
-		// same thing, but the state is deleted after 30s (getState will return null afterwards)
-		await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
+		const path = this.createPath(cleanVentName, channelName, objectName);
 
-		// examples for the checkPassword/checkGroup functions
-		let result = await this.checkPasswordAsync("admin", "iobroker");
-		this.log.info("check user admin pw iobroker: " + result);
+		this.setObjectNotExistsAsync(path, {
+			type: "state",
+			common: {
+				name: objectName,
+				type: "number",
+				role: "value",
+				unit: unit,
+				min: min,
+				max: max,
+				read: true,
+				write: writeAllowed,
+			},
+			native: {},
+		});
 
-		result = await this.checkGroupAsync("admin", "admin");
-		this.log.info("check group user admin group admin: " + result);
+		this.configMap.set(path, ventConfigEntry);
+		this.parameterMap.set(path, parameter);
+	}
+
+	createPath(cleanVentName, channelName, objectName) {
+		return "vents."
+			.concat(cleanVentName)
+			.concat(channelName.length > 0 ? "." + channelName : "")
+			.concat("." + objectName);
+	}
+
+	/**
+	 * @param {string} cleanVentName
+	 */
+	createDeviceObject(cleanVentName) {
+		this.setObjectNotExistsAsync("vents." + cleanVentName, {
+			type: "device",
+			common: {
+				name: "",
+			},
+			native: {},
+		});
+	}
+
+	/**
+	 * @param {string} cleanVentName
+	 */
+	createChannelObject(cleanVentName, channelName) {
+		this.setObjectNotExistsAsync("vents." + cleanVentName + "." + channelName, {
+			type: "channel",
+			common: {
+				name: "",
+			},
+			native: {},
+		});
+	}
+
+	updateVentdataPeriodically() {
+		this.log.debug("called updateVentdataPeriodically");
+
+		asyncForEach(this.config.vents, async (ventConfigEntry) => {
+			const cleanVentName = this.cleanNamespace(ventConfigEntry.name);
+			const vent = this.resource.findById(ventConfigEntry.id);
+
+			if (vent) {
+				const ipAddress = (await vent).ipAddress;
+				const id = (await vent).id;
+				const mode = (await vent).mode;
+				const speed = (await vent).speed;
+				const power = (await vent).on;
+
+				// First part of the path (informational states) e.g. "vents.livingroom.info."
+				const pathPrefixInfo = "vents.".concat(cleanVentName).concat(".info.");
+				const pathPrefixControl = "vents.".concat(cleanVentName).concat(".control.");
+
+				this.setStateChanged(pathPrefixInfo.concat(ID), id, true);
+				this.setStateChanged(pathPrefixInfo.concat(CURRENT_IP_ADDRESS), ipAddress, true);
+
+				this.setStateChanged(pathPrefixControl.concat(ON_OFF), power, true);
+				this.setStateChanged(pathPrefixControl.concat(SPEED), speed, true);
+				this.setStateChanged(pathPrefixControl.concat(VENTILATION_MODE), mode, true);
+
+				this.log.debug(ipAddress);
+			}
+		});
 	}
 
 	/**
@@ -184,11 +286,9 @@ class BlaubergVentilation extends utils.Adapter {
 	 */
 	onUnload(callback) {
 		try {
-			// Here you must clear all timeouts or intervals that may still be active
-			// clearTimeout(timeout1);
-			// clearTimeout(timeout2);
-			// ...
-			// clearInterval(interval1);
+			if (this.updateInterval) {
+				clearInterval(this.updateInterval);
+			}
 
 			callback();
 		} catch (e) {
@@ -196,65 +296,70 @@ class BlaubergVentilation extends utils.Adapter {
 		}
 	}
 
-	// If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
-	// You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
-	// /**
-	//  * Is called if a subscribed object changes
-	//  * @param {string} id
-	//  * @param {ioBroker.Object | null | undefined} obj
-	//  */
-	// onObjectChange(id, obj) {
-	// 	if (obj) {
-	// 		// The object was changed
-	// 		this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
-	// 	} else {
-	// 		// The object was deleted
-	// 		this.log.info(`object ${id} deleted`);
-	// 	}
-	// }
-
 	/**
 	 * Is called if a subscribed state changes
 	 * @param {string} id
 	 * @param {ioBroker.State | null | undefined} state
 	 */
-	onStateChange(id, state) {
-		if (state) {
-			// The state was changed
-			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+	async onStateChange(id, state) {
+		if (state && state.ack == false) {
+			/*
+				The ID comes with the complete namespace, including the adaptername and instance number
+				e.g. "blauberg-ventilation.0.vents.buero.control.speed". We need the id without this namespace,
+				so only "vents.buero.control.speed" in this example
+			*/
+			id = id.substring(this.namespace.length + 1);
+
+			// Check if we have a vent config in the map for this state id and get it
+			if (this.configMap.has(id) && this.parameterMap.has(id)) {
+				const configEntry = this.configMap.get(id);
+				const parameter = this.parameterMap.get(id);
+
+				this.log.error("Parameter: " + parameter);
+
+				const ventID = configEntry.id;
+				const password = configEntry.password;
+
+				this.log.error(ventID);
+				this.log.error(configEntry.name);
+				this.log.error(password);
+
+				const vent = this.resource.findById(ventID);
+
+				const value = Number(state.val);
+				this.log.error("State: " + state.val);
+				this.log.error("Number: " + value);
+
+				const packet = new blaubergVentoJS.Packet(ventID, password, blaubergVentoJS.FunctionType.WRITE, [blaubergVentoJS.DataEntry.of(parameter, value)]);
+				// Send package and wait for response.
+				try {
+					this.client.send(packet, (await vent).ipAddress);
+				} catch (err) {
+					this.log.error(err);
+					return;
+				}
+			}
 		} else {
 			// The state was deleted
 			this.log.info(`state ${id} deleted`);
 		}
 	}
 
-	// If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
-	// /**
-	//  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-	//  * Using this method requires "common.messagebox" property to be set to true in io-package.json
-	//  * @param {ioBroker.Message} obj
-	//  */
-	// onMessage(obj) {
-	// 	if (typeof obj === "object" && obj.message) {
-	// 		if (obj.command === "send") {
-	// 			// e.g. send email or pushover or whatever
-	// 			this.log.info("send command");
-
-	// 			// Send response in callback if required
-	// 			if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-	// 		}
-	// 	}
-	// }
-
+	/**
+	 * @param {string} id
+	 */
 	cleanNamespace(id) {
 		return id
 			.trim()
+			.toLowerCase()
+			.replace(/ä/g, "ae")
+			.replace(/ö/g, "oe")
+			.replace(/ü/g, "ue")
 			.replace(/\s/g, "_") // Replace whitespaces with underscores
 			.replace(/[^\p{Ll}\p{Lu}\p{Nd}]+/gu, "_") // Replace not allowed chars with underscore
 			.replace(/[_]+$/g, "") // Remove underscores end
 			.replace(/^[_]+/g, "") // Remove underscores beginning
 			.replace(/_+/g, "_") // Replace multiple underscores with one
-			.toLowerCase()
 			.replace(/_([a-z])/g, (m, w) => {
 				return w.toUpperCase();
 			});
