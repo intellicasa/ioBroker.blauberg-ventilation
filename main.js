@@ -272,8 +272,8 @@ class BlaubergVentilation extends utils.Adapter {
 				this.setStateChanged(pathPrefixInfo.concat(CURRENT_IP_ADDRESS), ipAddress, true);
 
 				this.setStateChanged(pathPrefixControl.concat(ON_OFF), power, true);
-				this.setStateChanged(pathPrefixControl.concat(SPEED), speed, true);
-				this.setStateChanged(pathPrefixControl.concat(VENTILATION_MODE), mode, true);
+				this.setStateChanged(pathPrefixControl.concat(SPEED), speed ? speed : "", true);
+				this.setStateChanged(pathPrefixControl.concat(VENTILATION_MODE), mode ? mode : "", true);
 
 				this.log.debug(ipAddress);
 			}
