@@ -57,10 +57,6 @@ class BlaubergVentilation extends utils.Adapter {
 						"Vent Name: " + vent.name + "   Vent ID: " + vent.id + " Vent Password: " + vent.password,
 					);
 
-					this.setStateChangedAsync("vents.${vent.name}.name", vent.name);
-					this.setStateChangedAsync("vents.${vent.id}.id", vent.id);
-					this.setStateChangedAsync("vents.${vent.password}.password", vent.password);
-
 					if (!vent.name) {
 						throw new Error("Invalid Vent configuration. Found Vent without name");
 					}
@@ -74,6 +70,27 @@ class BlaubergVentilation extends utils.Adapter {
 					if (!vent.password) {
 						throw new Error("Invalid Vent configuration. Found Vent without password");
 					}
+
+					const cleanVentName = this.cleanNamespace(vent.name);
+
+					await this.setObjectNotExistsAsync("vents." + cleanVentName + ".name", {
+						type: "state",
+						common: {
+							name: {
+								en: "name",
+								de: "Name",
+							},
+							type: "string",
+							role: "value",
+							//unit: "bla",
+							read: true,
+							write: false,
+							def: "",
+						},
+						native: {},
+					});
+
+					await this.setStateChangedAsync("vents." + cleanVentName + ".name", vent.name), true;
 				});
 			} catch (err) {
 				this.log.error(err);
@@ -228,6 +245,20 @@ class BlaubergVentilation extends utils.Adapter {
 	// 		}
 	// 	}
 	// }
+
+	cleanNamespace(id) {
+		return id
+			.trim()
+			.replace(/\s/g, "_") // Replace whitespaces with underscores
+			.replace(/[^\p{Ll}\p{Lu}\p{Nd}]+/gu, "_") // Replace not allowed chars with underscore
+			.replace(/[_]+$/g, "") // Remove underscores end
+			.replace(/^[_]+/g, "") // Remove underscores beginning
+			.replace(/_+/g, "_") // Replace multiple underscores with one
+			.toLowerCase()
+			.replace(/_([a-z])/g, (m, w) => {
+				return w.toUpperCase();
+			});
+	}
 }
 
 if (require.main !== module) {
