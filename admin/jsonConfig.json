@@ -6,7 +6,18 @@
 			"type": "panel",
 			"label": "Options",
 			"items": {
+				"pollIntervall": {
+					"type": "number",
+					"label": "configLabelPollInterval",
+					"help": "configHelpPollInterval",
+					"tooltip": "configHelpPollInterval",
+					"default": "5",
+					"sm": 1,
+					"md": 1,
+					"lg": 1
+				},
 				"vents": {
+					"newLine": true,
 					"type": "table",
 					"sm": 12,
 					"md": 12,

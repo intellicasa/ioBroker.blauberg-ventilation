@@ -48,8 +48,11 @@
 		]
 	},
 	"native": {
+		"pollIntervall": 5,
 		"vents": []
 	},
+	"protectedNative": ["vents.password"],
+	"encryptedNative": ["vents.password"],
 	"objects": [],
 	"instanceObjects": [
 		{

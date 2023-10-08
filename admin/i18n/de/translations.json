@@ -1,5 +1,7 @@
 {
 	"Options": "Optionen",
+	"configLabelPollInterval": "Abfrageinterval",
+	"configHelpPollInterval": "Alle wieviel Sekunden sollen die Lüfterwerte aktualisiert werden?",
 	"configTableLabel": "Lüfter",
 	"configLabelName": "Name",
 	"configHelpName": "Name der Lüftungsöffnung (z. B. Wohnzimmer)",

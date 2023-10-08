@@ -1,5 +1,7 @@
 {
 	"Options": "Options",
+	"configLabelPollInterval": "Polling interval",
+	"configHelpPollInterval": "Every how many seconds should the fan values be updated?",
 	"configTableLabel": "Vents",
 	"configLabelName": "Name",
 	"configHelpName": "Name of the vent (e.g. Living room)",
