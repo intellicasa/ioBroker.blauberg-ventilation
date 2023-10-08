@@ -6,12 +6,14 @@
 			"type": "panel",
 			"label": "Options",
 			"items": {
-				"pollIntervall": {
+				"pollInterval": {
 					"type": "number",
 					"label": "configLabelPollInterval",
 					"help": "configHelpPollInterval",
 					"tooltip": "configHelpPollInterval",
 					"default": "5",
+
+					"min": 1,
 					"sm": 1,
 					"md": 1,
 					"lg": 1

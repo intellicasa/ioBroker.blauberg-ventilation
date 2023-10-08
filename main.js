@@ -121,7 +121,7 @@ class BlaubergVentilation extends utils.Adapter {
 			}
 		}
 
-		const updateIntervalTime = this.config.pollIntervall * 1000;
+		const updateIntervalTime = this.config.pollInterval * 1000;
 
 		this.updateintervall = setInterval(async () => {
 			this.updateVentdataPeriodically();

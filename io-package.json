@@ -48,7 +48,7 @@
 		]
 	},
 	"native": {
-		"pollIntervall": 5,
+		"pollInterval": 5,
 		"vents": []
 	},
 	"protectedNative": ["vents.password"],
