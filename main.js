@@ -85,6 +85,9 @@ class BlaubergVentilation extends utils.Adapter {
 		this.client = new BlaubergVentoClient();
 		this.resource = new BlaubergVentoResource();
 
+		/**
+		 * @type {string | number | NodeJS.Timeout | null | undefined}
+		 */
 		this.updateInterval = null;
 	}
 
@@ -123,7 +126,7 @@ class BlaubergVentilation extends utils.Adapter {
 		}, parseInt("10000"));
 
 		// Reset the connection indicator during startup
-		this.setState("info.connection", false, true);
+		this.setState("info.connection", true, true);
 	}
 
 	validateVentConfig(vent) {
