@@ -116,120 +116,19 @@ class BlaubergVentilation extends utils.Adapter {
 					this.validateVentConfig(ventConfigEntry);
 
 					this.createDeviceAndStringState(ventConfigEntry, 0, "info", ID, "", false);
-					this.createDeviceAndStringState(
-						ventConfigEntry,
-						0,
-						"info",
-						CURRENT_IP_ADDRESS,
-						"",
-						false,
-					);
-					this.createDeviceAndNumberState(
-						ventConfigEntry,
-						blaubergVentoJS.Parameter.FAN1RPM,
-						"info",
-						FAN1RPM,
-						"",
-						false,
-						0,
-						10000,
-					);
-					this.createDeviceAndNumberState(
-						ventConfigEntry,
-						blaubergVentoJS.Parameter.FILTER_ALARM,
-						"info",
-						FILTER_ALARM,
-						"",
-						false,
-						0,
-						1,
-					);
-					this.createDeviceAndNumberState(
-						ventConfigEntry,
-						blaubergVentoJS.Parameter.FILTER_TIMER,
-						"info",
-						FILTER_TIMER_MINUTES,
-						"Minutes",
-						false,
-						0,
-						129600,
-					);
-					this.createDeviceAndStringState(
-						ventConfigEntry,
-						0,
-						"info",
-						FILTER_TIMER_STRING,
-						"",
-						false,
-					);
-					this.createDeviceAndStringState(
-						ventConfigEntry,
-						0,
-						"info",
-						FIRMWARE_DATE,
-						"",
-						false,
-					);
-					this.createDeviceAndStringState(
-						ventConfigEntry,
-						0,
-						"info",
-						READ_FIRMWARE_VERSION,
-						"",
-						false,
-					);
-					this.createDeviceAndNumberState(
-						ventConfigEntry,
-						blaubergVentoJS.Parameter.CURRENT_HUMIDITY,
-						"info",
-						CURRENT_HUMIDITY,
-						"%",
-						false,
-						0,
-						100,
-					);
-					this.createDeviceAndNumberState(
-						ventConfigEntry,
-						blaubergVentoJS.Parameter.MANUAL_SPEED,
-						"control",
-						MANUAL_SPEED,
-						"%",
-						true,
-						0,
-						100,
-					);
+					this.createDeviceAndStringState(ventConfigEntry, blaubergVentoJS.Parameter.CURRENT_IP_ADDRESS, "info", CURRENT_IP_ADDRESS, "", false);
+					this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.FAN1RPM, "info", FAN1RPM, "", false, 0, 10000);
+					this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.FILTER_ALARM, "info", FILTER_ALARM, "", false, 0, 1);
+					this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.FILTER_TIMER, "info", FILTER_TIMER_MINUTES, "Minutes", false, 0, 129600);
+					this.createDeviceAndStringState(ventConfigEntry, 0, "info", FILTER_TIMER_STRING, "", false);
+					this.createDeviceAndStringState(ventConfigEntry, 0, "info", FIRMWARE_DATE, "", false);
+					this.createDeviceAndStringState(ventConfigEntry, blaubergVentoJS.Parameter.READ_FIRMWARE_VERSION, "info", READ_FIRMWARE_VERSION, "", false);
+					this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.CURRENT_HUMIDITY, "info", CURRENT_HUMIDITY, "%", false, 0, 100);
+					this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.MANUAL_SPEED, "control", MANUAL_SPEED, "%", true, 0, 100);
 					//this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.BOOT_MODE, "info", BOOST_MODE, "", false, 0, 1);
-
-					this.createDeviceAndNumberState(
-						ventConfigEntry,
-						blaubergVentoJS.Parameter.VENTILATION_MODE,
-						"control",
-						VENTILATION_MODE,
-						"",
-						true,
-						0,
-						2,
-					);
-					this.createDeviceAndNumberState(
-						ventConfigEntry,
-						blaubergVentoJS.Parameter.SPEED,
-						"control",
-						SPEED,
-						"",
-						true,
-						1,
-						255,
-					);
-					this.createDeviceAndNumberState(
-						ventConfigEntry,
-						blaubergVentoJS.Parameter.ON_OFF,
-						"control",
-						ON_OFF,
-						"",
-						true,
-						0,
-						1,
-					);
+					this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.VENTILATION_MODE, "control", VENTILATION_MODE, "", true, 0, 2);
+					this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.SPEED, "control", SPEED, "", true, 1, 255);
+					this.createDeviceAndNumberState(ventConfigEntry, blaubergVentoJS.Parameter.ON_OFF, "control", ON_OFF, "", true, 0, 1);
 				});
 			} catch (err) {
 				this.log.error(err);
@@ -262,7 +161,7 @@ class BlaubergVentilation extends utils.Adapter {
 		} else if (!hexRegexp.test(vent.id)) {
 			throw new Error(
 				"Invalid Vent configuration. Vent ID must be hexadecimal. Only decimals 0-9 and uppercase letters A-F are allowed: " +
-					vent.id,
+				vent.id,
 			);
 		}
 
@@ -394,64 +293,66 @@ class BlaubergVentilation extends utils.Adapter {
 		asyncForEach(this.config.vents, async (ventConfigEntry) => {
 			const cleanVentName = this.cleanNamespace(ventConfigEntry.name);
 			try {
-				const vent = this.resource.findById(ventConfigEntry.id);
+				const response = this.resource.findById(ventConfigEntry.id);
+
+				/*const packet = new Packet(ventConfigEntry.id, ventConfigEntry.password, FunctionType.READ, [
+				DataEntry.of(Parameter.ON_OFF),
+				DataEntry.of(Parameter.SP50*2,5098EED),
+				DataEntry.of(Parameter.BOOT_MODE),
+				DataEntry.of(Parameter.TIMER_MODE),
+				DataEntry.of(Parameter.TIMER_COUNT_DOWN),
+				DataEntry.of(Parameter.HUMIDITY_SENSOR_ACTIVATION),
+				DataEntry.of(Parameter.RELAY_SENSOR_ACTIVIATION),
+				DataEntry.of(Parameter.VOLTAGE_SENSOR_ACTIVATION),
+				DataEntry.of(Parameter.HUMIDITY_THRESHOLD),
+				DataEntry.of(Parameter.CURRENT_RTC_BATTERY_VOLTAGE),
+				DataEntry.of(Parameter.CURRENT_HUMIDITY),
+				DataEntry.of(Parameter.CURRENT_VOLTAGE_SENSOR_STATE),
+				DataEntry.of(Parameter.CURRENT_RELAY_SENSOR_STATE),
+				DataEntry.of(Parameter.MANUAL_SPEED),
+				DataEntry.of(Parameter.FAN1RPM),
+				DataEntry.of(Parameter.FAN2RPM),
+				DataEntry.of(Parameter.FILTER_TIMER),
+				DataEntry.of(Parameter.BOOST_MODE_DEACTIVATION_DELAY),
+				DataEntry.of(Parameter.RTC_TIME),
+				DataEntry.of(Parameter.RTC_CALENDAR),
+				DataEntry.of(Parameter.WEEKLY_SCHEDULE),
+				DataEntry.of(Parameter.SCHEDULE_SETUP),
+				DataEntry.of(Parameter.SEARCH),
+				DataEntry.of(Parameter.PASSWORD),
+				DataEntry.of(Parameter.MACHINE_HOURS),
+				DataEntry.of(Parameter.READ_ALARM),
+				DataEntry.of(Parameter.CLOUD_SERVER_OPERATION_PERMISSION),
+				DataEntry.of(Parameter.READ_FIRMWARE_VERSION),
+				DataEntry.of(Parameter.FILTER_ALARM),
+				DataEntry.of(Parameter.WIFI_MODE),
+				DataEntry.of(Parameter.WIFI_NAME),
+				DataEntry.of(Parameter.WIFI_PASSWORD),
+				DataEntry.of(Parameter.WIFI_ENCRYPTION),
+				DataEntry.of(Parameter.WIFI_CHANNEL),
+				DataEntry.of(Parameter.WIFI_DHCP),
+				DataEntry.of(Parameter.IP_ADDRESS),
+				DataEntry.of(Parameter.SUBNET_MASK),
+				DataEntry.of(Parameter.GATEWAY),
+				DataEntry.of(Parameter.CURRENT_IP_ADDRESS),
+				DataEntry.of(Parameter.VENTILATION_MODE),
+				DataEntry.of(Parameter.UNIT_TYPE),
+			]);*/
+
+				const vent = await response.catch(() => { return null; });
 
 				if (vent) {
-					/*const packet = new Packet(ventConfigEntry.id, ventConfigEntry.password, FunctionType.READ, [
-					DataEntry.of(Parameter.ON_OFF),
-					DataEntry.of(Parameter.SP50*2,5098EED),
-					DataEntry.of(Parameter.BOOT_MODE),
-					DataEntry.of(Parameter.TIMER_MODE),
-					DataEntry.of(Parameter.TIMER_COUNT_DOWN),
-					DataEntry.of(Parameter.HUMIDITY_SENSOR_ACTIVATION),
-					DataEntry.of(Parameter.RELAY_SENSOR_ACTIVIATION),
-					DataEntry.of(Parameter.VOLTAGE_SENSOR_ACTIVATION),
-					DataEntry.of(Parameter.HUMIDITY_THRESHOLD),
-					DataEntry.of(Parameter.CURRENT_RTC_BATTERY_VOLTAGE),
-					DataEntry.of(Parameter.CURRENT_HUMIDITY),
-					DataEntry.of(Parameter.CURRENT_VOLTAGE_SENSOR_STATE),
-					DataEntry.of(Parameter.CURRENT_RELAY_SENSOR_STATE),
-					DataEntry.of(Parameter.MANUAL_SPEED),
-					DataEntry.of(Parameter.FAN1RPM),
-					DataEntry.of(Parameter.FAN2RPM),
-					DataEntry.of(Parameter.FILTER_TIMER),
-					DataEntry.of(Parameter.BOOST_MODE_DEACTIVATION_DELAY),
-					DataEntry.of(Parameter.RTC_TIME),
-					DataEntry.of(Parameter.RTC_CALENDAR),
-					DataEntry.of(Parameter.WEEKLY_SCHEDULE),
-					DataEntry.of(Parameter.SCHEDULE_SETUP),
-					DataEntry.of(Parameter.SEARCH),
-					DataEntry.of(Parameter.PASSWORD),
-					DataEntry.of(Parameter.MACHINE_HOURS),
-					DataEntry.of(Parameter.READ_ALARM),
-					DataEntry.of(Parameter.CLOUD_SERVER_OPERATION_PERMISSION),
-					DataEntry.of(Parameter.READ_FIRMWARE_VERSION),
-					DataEntry.of(Parameter.FILTER_ALARM),
-					DataEntry.of(Parameter.WIFI_MODE),
-					DataEntry.of(Parameter.WIFI_NAME),
-					DataEntry.of(Parameter.WIFI_PASSWORD),
-					DataEntry.of(Parameter.WIFI_ENCRYPTION),
-					DataEntry.of(Parameter.WIFI_CHANNEL),
-					DataEntry.of(Parameter.WIFI_DHCP),
-					DataEntry.of(Parameter.IP_ADDRESS),
-					DataEntry.of(Parameter.SUBNET_MASK),
-					DataEntry.of(Parameter.GATEWAY),
-					DataEntry.of(Parameter.CURRENT_IP_ADDRESS),
-					DataEntry.of(Parameter.VENTILATION_MODE),
-					DataEntry.of(Parameter.UNIT_TYPE),
-				]);*/
-
-					const ipAddress = (await vent).ipAddress;
+					const ipAddress = vent.ipAddress;
 					//this.response = this.client.send(packet, ipAddress);
 
-					const id = (await vent).id;
+					const id = vent.id;
 					//const isOn = this.response.packet.dataEntries[0].value;
-					const mode = (await vent).mode;
-					const speed = (await vent).speed;
-					const power = (await vent).on;
-					const fan1Rpm = (await vent).fan1Rpm;
-					const filterAlarm = (await vent).filterAlarm;
-					const filterTime = (await vent).filterTime;
+					const mode = vent.mode;
+					const speed = vent.speed;
+					const power = vent.on;
+					const fan1Rpm = vent.fan1Rpm;
+					const filterAlarm = vent.filterAlarm;
+					const filterTime = vent.filterTime;
 
 					const days = Math.floor(filterTime / 1440);
 					const daysRest = filterTime % (60 * 24);
@@ -462,56 +363,32 @@ class BlaubergVentilation extends utils.Adapter {
 					const minutesString = minutes + " Minuten";
 					const filterTimeString = daysString.concat(hoursString).concat(minutesString);
 
-					const firmwareDate = (await vent).firmwareDate.toLocaleDateString();
-					const firmwareVersion = (await vent).firmwareVersion;
-					const humidity = (await vent).humidity;
+					const firmwareDate = vent.firmwareDate.toLocaleDateString();
+					const firmwareVersion = vent.firmwareVersion;
+					const humidity = vent.humidity;
 					/* 	Parameter 68 = Manual Speed and is defined as 0..255
 					We want to set it as 0..100% so we need to make a conversion from percdntage to byte */
-					const manualSpeed = Math.round((await vent).manualSpeed / 2.56);
+					const manualSpeed = Math.round((vent).manualSpeed / 2.56);
 
 					// First part of the path (informational states) e.g. "vents.livingroom.info."
 					const pathPrefixInfo = "vents.".concat(cleanVentName).concat(".info.");
 					const pathPrefixControl = "vents.".concat(cleanVentName).concat(".control.");
 
 					this.setStateChanged(pathPrefixInfo.concat(ID), id, true);
-					this.setStateChanged(
-						pathPrefixInfo.concat(CURRENT_IP_ADDRESS),
-						ipAddress,
-						true,
-					);
+					this.setStateChanged(pathPrefixInfo.concat(CURRENT_IP_ADDRESS), ipAddress, true);
 
 					this.setStateChanged(pathPrefixControl.concat(ON_OFF), power, true);
 					//this.setStateChanged(pathPrefixControl.concat(BOOST_MODE), power, true);
 					this.setStateChanged(pathPrefixControl.concat(SPEED), speed ? speed : "", true);
-					this.setStateChanged(
-						pathPrefixInfo.concat(FAN1RPM),
-						fan1Rpm ? fan1Rpm : "",
-						true,
-					);
+					this.setStateChanged(pathPrefixInfo.concat(FAN1RPM), fan1Rpm ? fan1Rpm : "", true);
 					this.setStateChanged(pathPrefixInfo.concat(FILTER_ALARM), filterAlarm, true);
-					this.setStateChanged(
-						pathPrefixInfo.concat(FILTER_TIMER_MINUTES),
-						filterTime,
-						true,
-					);
-					this.setStateChanged(
-						pathPrefixInfo.concat(FILTER_TIMER_STRING),
-						filterTimeString,
-						true,
-					);
+					this.setStateChanged(pathPrefixInfo.concat(FILTER_TIMER_MINUTES), filterTime, true);
+					this.setStateChanged(pathPrefixInfo.concat(FILTER_TIMER_STRING), filterTimeString, true);
 					this.setStateChanged(pathPrefixInfo.concat(FIRMWARE_DATE), firmwareDate, true);
-					this.setStateChanged(
-						pathPrefixInfo.concat(READ_FIRMWARE_VERSION),
-						firmwareVersion,
-						true,
-					);
+					this.setStateChanged(pathPrefixInfo.concat(READ_FIRMWARE_VERSION), firmwareVersion, true);
 					this.setStateChanged(pathPrefixInfo.concat(CURRENT_HUMIDITY), humidity, true);
 					this.setStateChanged(pathPrefixControl.concat(MANUAL_SPEED), manualSpeed, true);
-					this.setStateChanged(
-						pathPrefixControl.concat(VENTILATION_MODE),
-						mode ? mode : "",
-						true,
-					);
+					this.setStateChanged(pathPrefixControl.concat(VENTILATION_MODE), mode ? mode : 0, true);
 				}
 			} catch (err) {
 				this.log.error(err);
