@@ -444,7 +444,7 @@ class BlaubergVentilation extends utils.Adapter {
 				let value = Number(state.val);
 
 				/* 	Parameter 68 = Manual Speed and is defined as 0..255
-					We want to set it as 0..100% so we need to make a conversion from percdntage to byte */
+					We want to set it as 0..100% so we need to make a conversion from percentage to byte */
 				if (parameter === 68) {
 					value = Math.round(value * 2.56);
 				}
