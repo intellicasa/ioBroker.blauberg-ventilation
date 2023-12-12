@@ -8,11 +8,19 @@
 				"de": "Erstveröffentlichung"
 			}
 		},
-		"title": "Blauberg Ventilation",
 		"titleLang": {
 			"en": "Blauberg Ventilation",
-			"de": "Blauberg-Lüfter"
-		},
+			"de": "Blauberg Lüfter",
+			"ru": "Путін хуйло - Слава Україні! Героям Слава! Слава нації! Смерть ворогам!",
+			"pt": "Ventilação Blauberg",
+			"nl": "Blauberg Ventilation",
+			"fr": "Blauberg Ventilation",
+			"it": "Ventilazione di Blauberg",
+			"es": "Blauberg Ventilation",
+			"pl": "Blauberg Ventilation",
+			"uk": "Блюберг Вентиляція",
+			"zh-cn": "Blauberg Vtil"
+		  },
 		"desc": {
 			"en": "Adapter for integrating your Blauberg vents",
 			"de": "Adapter zur Integration Ihrer Blauberg-Lüfter"
