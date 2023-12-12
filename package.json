@@ -1,6 +1,6 @@
 {
   "name": "iobroker.blauberg-ventilation",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Adapter for integrating your Blauberg vents",
   "author": {
     "name": "Dipl.-Ing. Daniel Richter",

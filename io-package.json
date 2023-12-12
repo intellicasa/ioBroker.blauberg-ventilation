@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "blauberg-ventilation",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "news": {
+      "0.0.3": {
+        "en": "Fixed some configuration issues",
+        "de": "Einige Konfigurationsprobleme behoben",
+        "ru": "Исправлены некоторые проблемы конфигурации",
+        "pt": "Corrigido alguns problemas de configuração",
+        "nl": "Wat configuratieproblemen",
+        "fr": "Correction de quelques problèmes de configuration",
+        "it": "Risolto alcuni problemi di configurazione",
+        "es": "Arreglar algunos problemas de configuración",
+        "pl": "Fixed niektóre kwestie konfiguracji",
+        "uk": "Виправлено деякі проблеми конфігурації",
+        "zh-cn": "混合一些组合问题"
+      },
       "0.0.2": {
         "en": "(Dipl.-Ing. Daniel Richter) initial release",
         "de": "(Dipl.-Ing Daniel Richter) Initial Release",

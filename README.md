@@ -16,8 +16,7 @@
 Adapter for integrating your Blauberg vents.
 
 ## Changelog
-
-### **WORK IN PROGRESS**
+### 0.0.3 (2023-12-12)
 - Fixed some configuration issues
 
 ### 0.0.2 (2023-12-12)
