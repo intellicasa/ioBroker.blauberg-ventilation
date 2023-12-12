@@ -5,7 +5,15 @@
 		"news": {
 			"0.0.1": {
 				"en": "initial release",
-				"de": "Erstveröffentlichung"
+				"de": "Erstveröffentlichung",
+				"pt": "lançamento inicial",
+				"nl": "niet",
+				"fr": "initial release",
+				"it": "rilascio iniziale",
+				"es": "liberación inicial",
+				"pl": "pierwsze wydanie",
+				"uk": "початковий реліз",
+				"zh-cn": "初步释放"
 			}
 		},
 		"titleLang": {
@@ -23,7 +31,16 @@
 		  },
 		"desc": {
 			"en": "Adapter for integrating your Blauberg vents",
-			"de": "Adapter zur Integration Ihrer Blauberg-Lüfter"
+			"de": "Adapter zur Integration Ihrer Blauberg-Lüfter",
+			"ru": "Адаптер для интеграции вашего Blauberg vents",
+			"pt": "Adaptador para integrar seu Ventiladores de Blauberg",
+			"nl": "Adapter voor integratie. Blauberg ventilatie",
+			"fr": "Adaptateur pour intégrer votre Vents de Blauberg",
+			"it": "Adattatore per integrare il tuo Bocche di Blauberg",
+			"es": "Adaptador para integrar su Ventiladores Blauberg",
+			"pl": "Adaptacja do integracji twojej. Blauberg vents",
+			"uk": "Адаптер для інтеграції Блюберг вентилятори",
+			"zh-cn": "你们的一体化前景 Blauberg vent"
 		},
 		"authors": ["Dipl.-Ing. Daniel Richter <info@danielrichter.eu>"],
 		"keywords": ["ventilation", "vent", "blauberg", "climate"],
