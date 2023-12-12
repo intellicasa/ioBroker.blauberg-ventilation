@@ -1,105 +1,129 @@
 {
-	"common": {
-		"name": "blauberg-ventilation",
-		"version": "0.0.1",
-		"news": {
-			"0.0.1": {
-				"en": "initial release",
-				"de": "Erstveröffentlichung",
-				"pt": "lançamento inicial",
-				"nl": "niet",
-				"fr": "initial release",
-				"it": "rilascio iniziale",
-				"es": "liberación inicial",
-				"pl": "pierwsze wydanie",
-				"uk": "початковий реліз",
-				"zh-cn": "初步释放"
-			}
-		},
-		"titleLang": {
-			"en": "Blauberg Ventilation",
-			"de": "Blauberg Lüfter",
-			"ru": "Путін хуйло - Слава Україні! Героям Слава! Слава нації! Смерть ворогам!",
-			"pt": "Ventilação Blauberg",
-			"nl": "Blauberg Ventilation",
-			"fr": "Blauberg Ventilation",
-			"it": "Ventilazione di Blauberg",
-			"es": "Blauberg Ventilation",
-			"pl": "Blauberg Ventilation",
-			"uk": "Blauberg Вентиляція",
-			"zh-cn": "Blauberg Vtil"
-		  },
-		"desc": {
-			"en": "Adapter for integrating your Blauberg vents",
-			"de": "Adapter zur Integration Ihrer Blauberg-Lüfter",
-			"ru": "Адаптер для интеграции вашего Blauberg vents",
-			"pt": "Adaptador para integrar seu Ventiladores de Blauberg",
-			"nl": "Adapter voor integratie. Blauberg ventilatie",
-			"fr": "Adaptateur pour intégrer votre Vents de Blauberg",
-			"it": "Adattatore per integrare il tuo Bocche di Blauberg",
-			"es": "Adaptador para integrar su Ventiladores Blauberg",
-			"pl": "Adaptacja do integracji twojej. Blauberg vents",
-			"uk": "Адаптер для інтеграції Блюберг вентилятори",
-			"zh-cn": "你们的一体化前景 Blauberg vent"
-		},
-		"authors": ["Dipl.-Ing. Daniel Richter <info@danielrichter.eu>"],
-		"keywords": ["ventilation", "vent", "blauberg", "climate"],
-		"license": "Apache-2.0",
-		"platform": "Javascript/Node.js",
-		"main": "main.js",
-		"icon": "blauberg.png",
-		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/intellicasa/ioBroker.blauberg-ventilation/main/admin/blauberg-ventilation.png",
-		"readme": "https://github.com/intellicasa/ioBroker.blauberg-ventilation/blob/main/README.md",
-		"loglevel": "info",
-		"mode": "daemon",
-		"type": "climate-control",
-		"compact": true,
-		"connectionType": "local",
-		"dataSource": "poll",
-		"adminUI": {
-			"config": "json"
-		},
-		"eraseOnUpload": true,
-		"dependencies": [
-			{
-				"js-controller": ">=3.3.22"
-			}
-		],
-		"globalDependencies": [
-			{
-				"admin": ">=5.0.0"
-			}
-		]
-	},
-	"native": {
-		"pollInterval": 5,
-		"vents": []
-	},
-	"protectedNative": ["vents.password"],
-	"encryptedNative": ["vents.password"],
-	"objects": [],
-	"instanceObjects": [
-		{
-			"_id": "info",
-			"type": "channel",
-			"common": {
-				"name": "Information"
-			},
-			"native": {}
-		},
-		{
-			"_id": "info.connection",
-			"type": "state",
-			"common": {
-				"role": "indicator.connected",
-				"name": "Device or service connected",
-				"type": "boolean",
-				"read": true,
-				"write": false,
-				"def": false
-			},
-			"native": {}
-		}
-	]
+  "common": {
+    "name": "blauberg-ventilation",
+    "version": "0.0.2",
+    "news": {
+      "0.0.2": {
+        "en": "(Dipl.-Ing. Daniel Richter) initial release",
+        "de": "(Dipl.-Ing Daniel Richter)",
+        "ru": "(Dipl.-Ing Daniel Richter) начальный релиз",
+        "pt": "(Dipl.-Ing Daniel Richter) lançamento inicial",
+        "nl": "Ing Daniel Richter",
+        "fr": "(Dipl.-Ing Daniel Richter) sortie initiale",
+        "it": "(Dipl.-Ing Daniel Richter) rilascio iniziale",
+        "es": "(Dipl.-Ing Daniel Richter) versión inicial",
+        "pl": "(Dipl.-Ing Daniel Richter) – pierwsze wydanie",
+        "uk": "(Dipl.-Ing Daniel Richter) початковий реліз",
+        "zh-cn": "(Dipl.-Ing Daniel Richter) 初步释放"
+      },
+      "0.0.1": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "pt": "lançamento inicial",
+        "nl": "niet",
+        "fr": "initial release",
+        "it": "rilascio iniziale",
+        "es": "liberación inicial",
+        "pl": "pierwsze wydanie",
+        "uk": "початковий реліз",
+        "zh-cn": "初步释放"
+      }
+    },
+    "titleLang": {
+      "en": "Blauberg Ventilation",
+      "de": "Blauberg Lüfter",
+      "ru": "Путін хуйло - Слава Україні! Героям Слава! Слава нації! Смерть ворогам!",
+      "pt": "Ventilação Blauberg",
+      "nl": "Blauberg Ventilation",
+      "fr": "Blauberg Ventilation",
+      "it": "Ventilazione di Blauberg",
+      "es": "Blauberg Ventilation",
+      "pl": "Blauberg Ventilation",
+      "uk": "Blauberg Вентиляція",
+      "zh-cn": "Blauberg Vtil"
+    },
+    "desc": {
+      "en": "Adapter for integrating your Blauberg vents",
+      "de": "Adapter zur Integration Ihrer Blauberg-Lüfter",
+      "ru": "Адаптер для интеграции вашего Blauberg vents",
+      "pt": "Adaptador para integrar seu Ventiladores de Blauberg",
+      "nl": "Adapter voor integratie. Blauberg ventilatie",
+      "fr": "Adaptateur pour intégrer votre Vents de Blauberg",
+      "it": "Adattatore per integrare il tuo Bocche di Blauberg",
+      "es": "Adaptador para integrar su Ventiladores Blauberg",
+      "pl": "Adaptacja do integracji twojej. Blauberg vents",
+      "uk": "Адаптер для інтеграції Блюберг вентилятори",
+      "zh-cn": "你们的一体化前景 Blauberg vent"
+    },
+    "authors": [
+      "Dipl.-Ing. Daniel Richter <info@danielrichter.eu>"
+    ],
+    "keywords": [
+      "ventilation",
+      "vent",
+      "blauberg",
+      "climate"
+    ],
+    "license": "Apache-2.0",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "blauberg.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/intellicasa/ioBroker.blauberg-ventilation/main/admin/blauberg-ventilation.png",
+    "readme": "https://github.com/intellicasa/ioBroker.blauberg-ventilation/blob/main/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "climate-control",
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "poll",
+    "adminUI": {
+      "config": "json"
+    },
+    "eraseOnUpload": true,
+    "dependencies": [
+      {
+        "js-controller": ">=3.3.22"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=5.0.0"
+      }
+    ]
+  },
+  "native": {
+    "pollInterval": 5,
+    "vents": []
+  },
+  "protectedNative": [
+    "vents.password"
+  ],
+  "encryptedNative": [
+    "vents.password"
+  ],
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }
