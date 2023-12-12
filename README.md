@@ -17,16 +17,12 @@ Adapter for integrating your Blauberg vents.
 
 ## Changelog
 
-<!--
-	Placeholder for the next version (at the beginning of the line):
-	### **WORK IN PROGRESS**
--->
+### **WORK IN PROGRESS**
+- Fixed some configuration issues
+
 ### 0.0.2 (2023-12-12)
 
 -   (Dipl.-Ing. Daniel Richter) initial release
-
-### **WORK IN PROGRESS**
-
 
 ## License
 
