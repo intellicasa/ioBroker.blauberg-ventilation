@@ -25,6 +25,9 @@ Adapter for integrating your Blauberg vents.
 
 -   (Dipl.-Ing. Daniel Richter) initial release
 
+### **WORK IN PROGRESS**
+
+
 ## License
 
     							 Apache License
