@@ -6,7 +6,7 @@
       "0.0.2": {
         "en": "(Dipl.-Ing. Daniel Richter) initial release",
         "de": "(Dipl.-Ing Daniel Richter) Initial Release",
-        "ru": "(Dipl.-Ing Daniel Richter) начальный релиз",
+        "ru": "(Dipl.-Ing Daniel Richter) початковий реліз",
         "pt": "(Dipl.-Ing Daniel Richter) lançamento inicial",
         "nl": "(Dipl.-Ing Daniel Richter) Initial Release",
         "fr": "(Dipl.-Ing Daniel Richter) sortie initiale",
@@ -19,6 +19,7 @@
       "0.0.1": {
         "en": "initial release",
         "de": "Erstveröffentlichung",
+        "ru": "початковий реліз",
         "pt": "lançamento inicial",
         "nl": "niet",
         "fr": "initial release",
@@ -32,7 +33,7 @@
     "titleLang": {
       "en": "Blauberg Ventilation",
       "de": "Blauberg Lüfter",
-      "ru": "Путін хуйло - Слава Україні! Героям Слава! Слава нації! Смерть ворогам!",
+      "ru": "Blauberg Вентиляція",
       "pt": "Ventilação Blauberg",
       "nl": "Blauberg Ventilation",
       "fr": "Blauberg Ventilation",
@@ -45,7 +46,7 @@
     "desc": {
       "en": "Adapter for integrating your Blauberg vents",
       "de": "Adapter zur Integration Ihrer Blauberg-Lüfter",
-      "ru": "Адаптер для интеграции вашего Blauberg vents",
+      "ru": "Адаптер для інтеграції Блюберг вентилятори",
       "pt": "Adaptador para integrar seu Ventiladores de Blauberg",
       "nl": "Adapter voor integratie. Blauberg ventilatie",
       "fr": "Adaptateur pour intégrer votre Vents de Blauberg",
