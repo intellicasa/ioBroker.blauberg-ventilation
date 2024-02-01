@@ -48,7 +48,7 @@
     "chai": "^4.3.8",
     "chai-as-promised": "^7.1.1",
     "eslint": "^8.50.0",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.2",
     "eslint-plugin-react": "^7.33.2",
     "mocha": "^10.2.0",
